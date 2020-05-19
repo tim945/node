@@ -4,7 +4,12 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
-    <router-view/>
+    <transition name="fade-transform" mode="out-in">
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
+    </transition>
+    <!-- <router-view/> -->
   </div>
 </template>
 
