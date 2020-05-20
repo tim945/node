@@ -8,13 +8,14 @@ let conns = {}; // conn 连接集
 let groups = []; // 在线群列表
 
 function boardcast(obj) {
-  if (obj.bridge && obj.bridge.length) {
-    // 单聊
+  // 单聊
+  if (obj.bridge && obj.bridge.length) {    
     obj.bridge.forEach(item => {
       conns[item].sendText(JSON.stringify(obj));
     });
     return;
   }
+  // 群聊
   if (obj.groupId) {
     group = groups.filter(item => {
       return item.id === obj.groupId;
@@ -25,7 +26,9 @@ function boardcast(obj) {
     return;
   }
 
+  // 系统消息扩播
   server.connections.forEach((conn, index) => {
+    // console.log(index)
     conn.sendText(JSON.stringify(obj));
   });
 }

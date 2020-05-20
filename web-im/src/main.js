@@ -1,3 +1,5 @@
+// import 'babel-polyfill' // 兼容 IE8
+
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
@@ -8,8 +10,6 @@ import messageUI from './components/message';
 
 Vue.config.productionTip = false
 Vue.prototype.$message = messageUI;
-
-console.log(messageUI)
 
 /* eslint-disable no-new */
 new Vue({

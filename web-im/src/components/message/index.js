@@ -22,7 +22,7 @@ var Message = function(options, type) {
 };
 var creatHtml = function() {
   var node = document.createElement("div");
-  if (option.id) {
+  if (option.id) {  // 只显示一个提示层
     document.getElementById(option.id + '-p').innerHTML = option.message;
     setTimeoutClose();
     return;
@@ -42,7 +42,7 @@ bindClose = function() {
   };
   setTimeoutClose();
 },
-close = function() {
+close = function() {  // 直接移除节点
   var remove = document.getElementById(option.id);
   document.body.removeChild(remove);
   option.id = '';
@@ -60,6 +60,7 @@ setTimeoutClose = function() {
   }
 };
 
+// 添加便捷使用方法
 ['success', 'warning', 'info', 'error'].forEach(function(type) {
   Message[type] = function(options) {
     return Message(options, type);

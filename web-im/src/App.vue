@@ -4,6 +4,7 @@
       ref="loginDialog"
       title='请输入你的昵称'
       confirmBtn="开始聊天"
+      :visable.sync="loginDialogVisable"
       @confirm="login"
     >
       <input class="nickname" v-model="nickname" type="text" placeholder="请输入你的昵称">
@@ -13,6 +14,7 @@
       ref="createGroupDialog"
       title='请输入群名称'
       confirmBtn="确认"
+      :visable.sync="createGroupDialogVisable"
       @confirm="createGroup"
     >
       <input class="nickname" v-model="groupName" type="text" placeholder="请输入群名称">
@@ -40,7 +42,7 @@
           </div>
           <div class="footer">
             <div class="func dis-flex">
-              <label @click="$refs.createGroupDialog.show()">新建群</label>
+              <label @click="showGroupDialog">新建群</label> {{createGroupDialogVisable}}
             </div>
           </div>
         </div>
@@ -96,7 +98,9 @@ export default {
       groups: [],
       groupId: '',
       bridge: [], // 单聊 对话用户双方的ID
-      groupName: ''
+      groupName: '',
+      loginDialogVisable: false,
+      createGroupDialogVisable: false,
     }
   },
   mounted() {
@@ -107,7 +111,8 @@ export default {
     vm.nickname = user.nickname;
 
     if(!vm.uid){
-      vm.$refs.loginDialog.show()
+      // vm.$refs.loginDialog.show()
+      this.loginDialogVisable = true
     } else {
       vm.conWebSocket();
     }
@@ -198,6 +203,12 @@ export default {
         return item.uid === this.uid
       })
     },
+    // 创建群弹层
+    showGroupDialog() {
+      // this.$refs.createGroupDialog.show()
+      debugger
+      this.createGroupDialogVisable = true
+    },
     // 创建群
     createGroup() {
       this.groupName = this.groupName.trim();
@@ -205,6 +216,7 @@ export default {
         this.$message({type: 'error', message: '请输入群名称'})
         return;
       }
+      this.showGroupDialog = false;
       this.socket.send(JSON.stringify({
         uid: this.uid,
         type: 10, // <---
@@ -280,6 +292,7 @@ export default {
         }
         socket.onerror = function(){
           console.log("连接出错");
+          vm.$message({type: 'error', duration:0, message: '与服务器连接出错'})
         }
         // 接收服务器的消息
         socket.onmessage = function(e){
@@ -306,7 +319,8 @@ export default {
         this.$message({type: 'error', message: '请输入您的昵称'})
         return;
       }
-      this.$refs.loginDialog.hide()
+      // this.$refs.loginDialog.hide()
+      this.loginDialogVisable = false;
       this.conWebSocket();
     }
   }

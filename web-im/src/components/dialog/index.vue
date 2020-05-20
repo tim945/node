@@ -16,6 +16,10 @@
 <script>
 export default {
   props: {
+    visable: {
+      type: [Boolean],
+      default: false
+    },
     title: {
       type: [String],
       default: ''
@@ -31,23 +35,33 @@ export default {
   },
   data(){
     return {
-      visable: false
+      // visable: false
     }
   },
   methods: {
     show(){
-      this.visable = true
+      // this.visable = true
+      this.$emit("update:visable", true)
     },
     hide(){
-      this.visable = false
+      // this.visable = false
+      this.$emit("update:visable", false)
     },
     cancel(){
       this.hide()
     },
     confirm(){
       this.$emit('confirm')
-      this.hide()
+      // this.hide()
     }
+  },
+  watch: {
+    visable(n, o) {
+      console.log(n, o)
+    }
+  },
+  mounted() {
+    console.log(this.visable)
   }
 }
 </script>
