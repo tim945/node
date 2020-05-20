@@ -54,15 +54,7 @@ export default {
       this.$emit('confirm')
       // this.hide()
     }
-  },
-  watch: {
-    visable(n, o) {
-      console.log(n, o)
-    }
-  },
-  mounted() {
-    console.log(this.visable)
-  }
+  }  
 }
 </script>
 

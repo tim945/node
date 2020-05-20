@@ -42,13 +42,16 @@
           </div>
           <div class="footer">
             <div class="func dis-flex">
-              <label @click="showGroupDialog">新建群</label> {{createGroupDialogVisable}}
+              <label @click="showGroupDialog">新建群</label>
             </div>
           </div>
         </div>
       </div>
       <div class="right content">
-        <div class="header im-title">{{title}}</div>
+        <div class="header im-title">
+          <span>{{title}}</span>
+          <span style="float: right; padding: 0 10px;" v-if="uid"><button type="button" @click="logout">退出</button></span>
+        </div>
         <div class="body im-record" id="im-record">
           <div class="ul">
             <div class="li" :class="{user: item.uid == uid}" v-for="item in currentMessage">
@@ -77,7 +80,6 @@
 <script>
 import Vue from 'vue'
 import moment from 'moment'
-
 
 export default {
   name: 'App',
@@ -111,7 +113,10 @@ export default {
     vm.nickname = user.nickname;
 
     if(!vm.uid){
-      // vm.$refs.loginDialog.show()
+      // 此处在IE下获取不到实例，具体原因是组件未挂载, DOM结构已经渲染出来了，
+      // 但是如果在DOM结构中的某个DOM节点使用了v-if、v-show或者v-for（即根据获得的后台数据来动态操作DOM，即响应式），
+      // 那么这些DOM是不会再mounted阶段找到的 --> https://www.jianshu.com/p/7dbdcd6dfad6
+      // vm.$refs.loginDialog.show()  
       this.loginDialogVisable = true
     } else {
       vm.conWebSocket();
@@ -137,11 +142,11 @@ export default {
     currentMessage() {
       let vm = this;
       let data = vm.messageList.filter(item=>{
-        if(item.type === 1) { // 单聊
+        if(item.type === 1) { // 系统消息
           return item;
         } else if(this.groupId) { // 群聊
           return item.groupId === this.groupId
-        } else if(item.bridge.length){
+        } else if(item.bridge.length){  // 单聊
           return item.bridge.sort().join(',') == vm.bridge.sort().join(',')
         }
       })
@@ -206,7 +211,7 @@ export default {
     // 创建群弹层
     showGroupDialog() {
       // this.$refs.createGroupDialog.show()
-      debugger
+      this.groupName = '';  // 清空
       this.createGroupDialogVisable = true
     },
     // 创建群
@@ -322,6 +327,30 @@ export default {
       // this.$refs.loginDialog.hide()
       this.loginDialogVisable = false;
       this.conWebSocket();
+    },
+    // 退出
+    logout() {
+      localStorage.removeItem('WEB_IM_USER');
+      this.socket.send(JSON.stringify({
+        uid: this.uid,
+        type: 2,
+        nickname: this.nickname,
+        bridge: []
+      }));
+      this.socket && this.socket.close()  // 关闭连接
+
+      this.title = '请选择群或者人员进行聊天';
+      this.switchType = 1;
+      this.uid = '';
+      this.nickname = '';
+      this.socket = '';
+      this.msg = '';
+      this.messageList = [];
+      this.users = [];
+      this.groups = [];
+      this.groupId = '';
+      this.bridge = []; 
+      this.groupName = '';
     }
   }
 }

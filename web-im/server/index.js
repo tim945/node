@@ -49,7 +49,7 @@ var server = ws
             users.push({
               nickname: obj.nickname,
               uid: obj.uid,
-              status: 1
+              status: 1 // --> 用户在线状态
             });
           } else {
             users.map((item, index) => {
@@ -72,13 +72,19 @@ var server = ws
           break;
         // 注销
         case 2:
-          // delete conns[''+obj.uid+''];
-          users.map((item, index) => {
+          // delete conns[''+obj.uid+''];          
+          /* users.map((item, index) => {
             if (item.uid === obj.uid) {
               item.status = 0;
             }
             return item;
-          });
+          }); */
+
+          users = users.filter(item => item.uid != obj.uid);
+          groups.forEach(item => {
+            item.users = item.users.filter(v => v.uid != obj.uid)
+          })
+
           boardcast({
             type: 1,
             date: moment().format("YYYY-MM-DD HH:mm:ss"),
