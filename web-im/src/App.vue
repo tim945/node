@@ -135,6 +135,9 @@ export default {
         nickname: vm.nickname,
         bridge: []
       }));
+      vm.socket.close();
+
+      // 群组处理
     }
   },
   computed: {
@@ -216,12 +219,12 @@ export default {
     },
     // 创建群
     createGroup() {
-      this.groupName = this.groupName.trim();
+      this.groupName = (this.groupName || '').trim();
       if(!this.groupName){
         this.$message({type: 'error', message: '请输入群名称'})
         return;
       }
-      this.showGroupDialog = false;
+      this.createGroupDialogVisable = false;
       this.socket.send(JSON.stringify({
         uid: this.uid,
         type: 10, // <---
@@ -319,7 +322,7 @@ export default {
       }
     },
     login(){
-      this.nickname = this.nickname.trim();
+      this.nickname = (this.nickname || '').trim();
       if(!this.nickname){
         this.$message({type: 'error', message: '请输入您的昵称'})
         return;
