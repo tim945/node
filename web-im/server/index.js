@@ -1,3 +1,5 @@
+// https://www.jianshu.com/p/f0baf93a3795
+
 var ws = require("nodejs-websocket");
 var moment = require("moment");
 
@@ -46,13 +48,13 @@ var server = ws
           let isuser = users.some(item => {
             return item.uid === obj.uid;
           });
-          if (!isuser) {
+          if (!isuser) {  // 增加用户
             users.push({
               nickname: obj.nickname,
               uid: obj.uid,
               status: 1 // --> 用户在线状态
             });
-          } else {
+          } else { // 更新用户在线状态
             users.map((item, index) => {
               if (item.uid === obj.uid) {
                 item.status = 1;

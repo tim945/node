@@ -1,3 +1,10 @@
+/*
+ * @Author: tim
+ * @Date: 2020-05-23 10:20:45
+ * @LastEditors: tim
+ * @LastEditTime: 2020-05-23 11:57:44
+ * @Description: 
+ */ 
 // import 'babel-polyfill' // 兼容 IE8
 
 // The Vue build version to load with the `import` command
@@ -18,3 +25,8 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+// new Vue({ 
+//   router,
+//   render: h => h(App)
+// }).$mount("#app")
