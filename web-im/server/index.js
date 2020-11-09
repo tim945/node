@@ -17,6 +17,7 @@ function boardcast(obj) {
   }
   // 群聊
   if (obj.groupId) {
+    console.log('群聊', JSON.stringify(groups));
     group = groups.filter(item => {
       return item.id === obj.groupId;
     })[0];
@@ -81,6 +82,15 @@ var server = ws
           }); */
 
           users = users.filter(item => item.uid != obj.uid);
+
+          let userIds = users.map(v => v.uid);  // 线上用户
+
+          groups = groups.filter(item => {
+            return item.users.find(v => userIds.includes(v.uid))    
+          })  || [];  // 线上用户群组
+
+          console.log(JSON.stringify(groups))
+
           groups.forEach(item => {
             item.users = item.users.filter(v => v.uid != obj.uid)
           })

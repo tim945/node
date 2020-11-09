@@ -110,7 +110,7 @@ export default {
     let user = localStorage.getItem('WEB_IM_USER');
     user = user && JSON.parse(user) || {};
     vm.uid = user.uid;
-    vm.nickname = user.nickname;
+    vm.nickname = user.nickname || '';
 
     if(!vm.uid){
       // 此处在IE下获取不到实例，具体原因是组件未挂载, DOM结构已经渲染出来了，
@@ -221,7 +221,12 @@ export default {
         this.$message({type: 'error', message: '请输入群名称'})
         return;
       }
-      this.showGroupDialog = false;
+      if(this.groups.find(v => v.name === this.groupName)){
+        this.$message({type: 'error', message: '已存在相同群名称，请另输入'})
+        return;
+      }
+
+      this.createGroupDialogVisable = false;
       this.socket.send(JSON.stringify({
         uid: this.uid,
         type: 10, // <---

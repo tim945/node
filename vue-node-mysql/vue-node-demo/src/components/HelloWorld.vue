@@ -1,5 +1,8 @@
 <template>
   <div class="hello">
+    <p>
+      {{ msg }}
+    </p>
     <form ref="form" action="" @submit.prevent>
       姓名：<input type="text" name="username" v-model="userName" />
       <br />
@@ -57,7 +60,7 @@ export default {
         })
         .then((res) => {
           this.reset();
-          console.log("信息添加成功");
+          console.log("信息添加成功", res);
           this.selectUser();
         })
         .catch((err) => {
@@ -70,7 +73,7 @@ export default {
           id,
         })
         .then((res) => {
-          console.log("删除成功");
+          console.log("删除成功", res);
           this.selectUser();
         })
         .catch((err) => {
