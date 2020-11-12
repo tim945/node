@@ -91,7 +91,7 @@ var server = ws
             return item.users.find(v => userIds.includes(v.uid))    
           })  || [];  // 线上用户群组
 
-          console.log(JSON.stringify(groups))
+          console.log('线上用户群组:', JSON.stringify(groups))
 
           groups.forEach(item => {
             item.users = item.users.filter(v => v.uid != obj.uid)
